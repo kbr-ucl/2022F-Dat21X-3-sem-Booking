@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Booking.Domain.DomainServices;
+﻿using Booking.Domain.DomainServices;
+namespace Booking.Infrastructure.DomainServicesImpl;
 
-namespace Booking.Infrastructure.DomainServicesImpl
+public class BookingDomainService : IBookingDomainService
 {
-    public class BookingDomainService : IBookingDomainService
+    IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetExsistingBookings()
     {
-        IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetExsistingBookings()
-        {
-            throw new NotImplementedException();
-        }
+        var bookings = new List<Domain.Entities.Booking>();
+        Database.Bookings.Values.ToList()
+            .ForEach(a => bookings.Add(new Domain.Entities.Booking(a.Id, a.Start, a.Slut)));
+        return bookings;
     }
 }

@@ -10,13 +10,17 @@ namespace Booking.Domain.Tests;
 public class BookingTests
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly List<Entities.Booking> _exsistingBookings;
 
     public BookingTests()
     {
-        var exsistingBookings = new List<BookingStub>(new[]
-            {new BookingStub(new DateTime(2022, 1, 1, 10, 0, 0), new DateTime(2022, 1, 1, 11, 0, 0))});
+        _exsistingBookings = new List<Entities.Booking>(new[]
+        {
+            new Entities.Booking(Guid.NewGuid(), new DateTime(2022, 1, 1, 10, 0, 0), new DateTime(2022, 1, 1, 11, 0, 0)),
+            new Entities.Booking(Guid.NewGuid(), new DateTime(2022, 1, 1, 14, 0, 0), new DateTime(2022, 1, 1, 15, 0, 0))
+        });
         var bookingDomainServiceMock = new Mock<IBookingDomainService>();
-        bookingDomainServiceMock.Setup(foo => foo.GetExsistingBookings()).Returns(exsistingBookings);
+        bookingDomainServiceMock.Setup(foo => foo.GetExsistingBookings()).Returns(_exsistingBookings);
 
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddScoped(sp => bookingDomainServiceMock.Object);
@@ -70,7 +74,7 @@ public class BookingTests
         var caughtException = Assert.Throws<Exception>(action);
         Assert.Equal(expected, caughtException.Message);
     }
-    
+
     [Theory]
     [InlineData("2022-1-1 08:00", "2022-1-1 09:00")]
     public void Given_No_Overlap__Then_Booking_Is_Created(string startStr, string slutStr)
@@ -78,7 +82,7 @@ public class BookingTests
         // Arrange
         var start = DateTime.Parse(startStr);
         var slut = DateTime.Parse(slutStr);
-        
+
         // Act
         var sut = new Entities.Booking(_serviceProvider, start, slut);
 
@@ -100,8 +104,8 @@ public class BookingTests
         // Arrange
         var start = DateTime.Parse(startStr);
         var slut = DateTime.Parse(slutStr);
-        var expected = $"Booking overlapper med eksisterende booking";
-        
+        var expected = "Booking overlapper med eksisterende booking";
+
         // Act
         Action action = () => new Entities.Booking(_serviceProvider, start, slut);
 
@@ -110,15 +114,40 @@ public class BookingTests
         Assert.True(expected.Equals(caughtException.Message), userMessage);
     }
 
-    public class BookingStub : Entities.Booking
-    {
-        public BookingStub(IServiceProvider serviceProvider, DateTime start, DateTime slut) : base(serviceProvider,
-            start, slut)
-        {
-        }
 
-        public BookingStub(DateTime start, DateTime slut) : base(start, slut)
-        {
-        }
+    [Theory]
+    [InlineData("2022-1-1 08:00", "2022-1-1 09:00")]
+    public void Given_No_Overlap_And_Edit__Then_Booking_Is_Created(string startStr, string slutStr)
+    {
+        // Arrange
+        var start = DateTime.Parse(startStr);
+        var slut = DateTime.Parse(slutStr);
+        var sut = _exsistingBookings[0];
+        sut.ServiceProvider = _serviceProvider;
+
+        // Act
+        sut.Update(start, slut);
+
+        //Assert
+        Assert.NotNull(sut);
+    }
+
+    [Theory]
+    [InlineData("2022-1-1 13:39", "2022-1-1 14:30", "Slut rækker ind i eksisterende booking")]
+    public void Given_Overlap_And_Edit__Then_Booking_Then_Exception_Is_Thrown(string startStr, string slutStr, string userMessage)
+    {
+        // Arrange
+        var start = DateTime.Parse(startStr);
+        var slut = DateTime.Parse(slutStr);
+        var sut = _exsistingBookings[0];
+        sut.ServiceProvider = _serviceProvider;
+        var expected = "Booking overlapper med eksisterende booking";
+
+        // Act
+        Action action = () => sut.Update(start, slut);
+
+        //Assert
+        var caughtException = Assert.Throws<Exception>(action);
+        Assert.True(expected.Equals(caughtException.Message), userMessage);
     }
 }

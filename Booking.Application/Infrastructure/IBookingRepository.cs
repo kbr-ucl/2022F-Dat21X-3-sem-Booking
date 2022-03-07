@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Booking.Application.Infrastructure;
 
-namespace Booking.Application.Infrastructure
+public interface IBookingRepository
 {
-    public interface IBookingRepository
-    {
-    }
+    void Add(Domain.Entities.Booking booking);
+    Domain.Entities.Booking Get(Guid id);
+    void Save(Domain.Entities.Booking booking);
 }

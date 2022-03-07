@@ -1,0 +1,46 @@
+﻿@page
+@model IndexModel
+@{
+}
+<section class="container-fluid">
+    <h1>Bookings</h1>
+    <article>
+        <a asp-page="Create">Opret ny booking</a>
+    </article>
+
+    <article>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <label asp-for="Bookings.First().Start"></label>
+                </th>
+                <th>
+                    <label asp-for="Bookings.First().Start"></label>
+                </th>
+                <th>
+                    <label>Action</label>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Bookings)
+            {
+                <tr>
+                    <td>
+                        @item.Start
+                    </td>
+                    <td>
+                        @item.Slut
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </article>
+</section>

@@ -5,11 +5,12 @@ namespace Booking.Domain.Entities;
 
 public class Booking
 {
-    private readonly IServiceProvider _serviceProvider;
+    public IServiceProvider? ServiceProvider { get; set; }
 
-    // DO NOT USE TEST ONLY
-    protected Booking(DateTime start, DateTime slut)
+    // DO NOT USE - EF and TEST ONLY!!!
+    public Booking(Guid id, DateTime start, DateTime slut)
     {
+        Id = id;
         Start = start;
         Slut = slut;
     }
@@ -22,21 +23,30 @@ public class Booking
             throw new Exception($"Slut dato/tid skal være senere end start (start, slut): {start}, {slut}");
         Start = start;
         Slut = slut;
-        _serviceProvider = serviceProvider;
+        ServiceProvider = serviceProvider;
 
         if (IsOverlapping()) throw new Exception("Booking overlapper med eksisterende booking");
+        Id = Guid.NewGuid();
     }
 
-    public Guid Id { get; set; }
+    public Guid Id { get; private set; }
     public DateTime Start { get; private set; }
     public DateTime Slut { get; private set; }
 
     protected bool IsOverlapping()
     {
-        var bookingDomainService = _serviceProvider.GetService<IBookingDomainService>();
+        var bookingDomainService = ServiceProvider?.GetService<IBookingDomainService>();
         if (bookingDomainService == null) throw new Exception("Implementation of IBookingDomainService was not found");
 
         return bookingDomainService.GetExsistingBookings()
             .Any(a => a.Start >= Start && a.Start <= Slut || a.Slut >= Start && a.Slut <= Slut);
+        //.Any(a => a.Id != Id && (a.Start >= Start && a.Start <= Slut || a.Slut >= Start && a.Slut <= Slut));
+    }
+
+    public void Update(DateTime start, DateTime slut)
+    {
+        Start = start;
+        Slut = slut;
+        if (IsOverlapping()) throw new Exception("Booking overlapper med eksisterende booking");
     }
 }
