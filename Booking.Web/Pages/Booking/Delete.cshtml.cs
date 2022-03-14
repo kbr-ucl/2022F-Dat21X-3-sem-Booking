@@ -38,7 +38,7 @@ namespace Booking.Web.Pages.Booking
         {
             if (id == null) return NotFound();
 
-            _bookingCommand.Delete(Booking.GetAsBookingCommandDto());
+            _bookingCommand.Delete(id.Value);
 
             return RedirectToPage("./Index");
         }

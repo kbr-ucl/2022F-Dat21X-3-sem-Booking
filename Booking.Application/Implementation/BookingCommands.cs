@@ -21,9 +21,9 @@ public class BookingCommand : IBookingCommand
         _repository.Add(booking);
     }
 
-    void IBookingCommand.Delete(BookingCommandDto bookingDto)
+    void IBookingCommand.Delete(Guid id)
     {
-        _repository.Delete(bookingDto.Id);
+        _repository.Delete(id);
     }
 
     void IBookingCommand.Edit(BookingCommandDto bookingDto)

@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booking.Domain.Tests", "Boo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserInterface", "UserInterface", "{A8003D99-95F9-4E03-BAA1-073927CB5A8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Web", "Booking.Web\Booking.Web.csproj", "{C1719B76-F22C-47BA-A03C-1537A60BC935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booking.Web", "Booking.Web\Booking.Web.csproj", "{C1719B76-F22C-47BA-A03C-1537A60BC935}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiInterface", "ApiInterface", "{F71494EB-3BD2-453E-BC3A-1CF6C3EA617D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.ApiInterface", "Booking.ApiInterface\Booking.ApiInterface.csproj", "{86E2AC59-24B2-4E64-BF0E-B52B3CA873EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,10 @@ Global
 		{C1719B76-F22C-47BA-A03C-1537A60BC935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1719B76-F22C-47BA-A03C-1537A60BC935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1719B76-F22C-47BA-A03C-1537A60BC935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86E2AC59-24B2-4E64-BF0E-B52B3CA873EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86E2AC59-24B2-4E64-BF0E-B52B3CA873EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86E2AC59-24B2-4E64-BF0E-B52B3CA873EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86E2AC59-24B2-4E64-BF0E-B52B3CA873EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +64,7 @@ Global
 		{C0956C2A-5F34-44C3-AFDF-58DCA6CEA47E} = {F33A386E-97AC-4B46-BEA4-DDFA22EBEA7F}
 		{E43F01ED-7B88-49BA-B9ED-700443AA67D9} = {C0956C2A-5F34-44C3-AFDF-58DCA6CEA47E}
 		{C1719B76-F22C-47BA-A03C-1537A60BC935} = {A8003D99-95F9-4E03-BAA1-073927CB5A8D}
+		{86E2AC59-24B2-4E64-BF0E-B52B3CA873EE} = {F71494EB-3BD2-453E-BC3A-1CF6C3EA617D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11FF3ADC-EE1F-4B55-8582-DA1BDB5CF9A8}
