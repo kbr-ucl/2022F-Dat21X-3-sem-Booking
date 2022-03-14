@@ -1,33 +1,40 @@
-﻿using Booking.Application.Contract.Dtos;
-using Booking.Application.Infrastructure;
+﻿using Booking.Application.Infrastructure;
+using Booking.Infrastructure.Database;
 
 namespace Booking.Infrastructure.RepositoriesImpl;
 
 public class BookingRepository : IBookingRepository
 {
+    private readonly BookingContext _db;
+
+    public BookingRepository(BookingContext db)
+    {
+        _db = db;
+    }
+
     void IBookingRepository.Add(Domain.Entities.Booking booking)
     {
-        Database.Bookings.Add(booking.Id, new BookingQueryDto{Id = booking.Id, Slut = booking.Slut, Start = booking.Start});
+        _db.Bookings.Add(booking);
+        _db.SaveChanges();
     }
 
     void IBookingRepository.Delete(Guid id)
     {
-        Database.Bookings.Remove(id);
+        var booking = _db.Bookings.Find(id);
+        if (booking is null) return;
+
+        _db.Bookings.Remove(booking);
+        _db.SaveChanges();
     }
 
     Domain.Entities.Booking IBookingRepository.Get(Guid id)
     {
-        var db = Database.Bookings[id];
-        return new Domain.Entities.Booking(db.Id, db.Start, db.Slut);
+        return _db.Bookings.Find(id) ?? throw new Exception("Booking not found");
     }
 
     void IBookingRepository.Save(Domain.Entities.Booking booking)
     {
-        if (!Database.Bookings.ContainsKey(booking.Id)) throw new Exception("Booking findes ikke i databasen");
-
-        var db = Database.Bookings[booking.Id];
-        db.Id = booking.Id;
-        db.Start = booking.Start;
-        db.Slut = booking.Slut; 
+        _db.Bookings.Update(booking);
+        _db.SaveChanges();
     }
 }

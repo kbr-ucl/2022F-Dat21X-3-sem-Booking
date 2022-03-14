@@ -1,13 +1,18 @@
 ﻿using Booking.Domain.DomainServices;
+using Booking.Infrastructure.Database;
+
 namespace Booking.Infrastructure.DomainServicesImpl;
 
 public class BookingDomainService : IBookingDomainService
 {
+    private readonly BookingContext _db;
+
+    public BookingDomainService(BookingContext db)
+    {
+        _db = db;
+    }
     IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetExsistingBookings()
     {
-        var bookings = new List<Domain.Entities.Booking>();
-        Database.Bookings.Values.ToList()
-            .ForEach(a => bookings.Add(new Domain.Entities.Booking(a.Id, a.Start, a.Slut)));
-        return bookings;
+        return _db.Bookings.ToList();
     }
 }
