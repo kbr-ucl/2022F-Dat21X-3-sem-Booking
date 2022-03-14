@@ -10,6 +10,11 @@ public class BookingRepository : IBookingRepository
         Database.Bookings.Add(booking.Id, new BookingQueryDto{Id = booking.Id, Slut = booking.Slut, Start = booking.Start});
     }
 
+    void IBookingRepository.Delete(Guid id)
+    {
+        Database.Bookings.Remove(id);
+    }
+
     Domain.Entities.Booking IBookingRepository.Get(Guid id)
     {
         var db = Database.Bookings[id];
