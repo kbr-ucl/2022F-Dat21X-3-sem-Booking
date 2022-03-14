@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Infrastructure.Database;
 
@@ -13,11 +14,8 @@ public class BookingContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Domain.Entities.Booking>(model =>
-        {
-            model.HasKey(b => b.Id);
-            model.Ignore(b => b.ServiceProvider);
-        });
-
+        //this will apply configs from separate classes
+        //which implemented IEntityTypeConfiguration<T>
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

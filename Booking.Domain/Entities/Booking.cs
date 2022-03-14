@@ -5,13 +5,11 @@ namespace Booking.Domain.Entities;
 
 public class Booking
 {
-    // DO NOT USE - EF and TEST ONLY!!!
-    public Booking(Guid id, DateTime start, DateTime slut)
-    {
-        Id = id;
-        Start = start;
-        Slut = slut;
-    }
+    public IServiceProvider? ServiceProvider { get; set; }
+
+    public Guid Id { get; }
+    public DateTime Start { get; private set; }
+    public DateTime Slut { get; private set; }
 
     public Booking(IServiceProvider serviceProvider, DateTime start, DateTime slut)
     {
@@ -27,11 +25,14 @@ public class Booking
         Id = Guid.NewGuid();
     }
 
-    public IServiceProvider? ServiceProvider { get; set; }
+    // DO NOT USE - TEST ONLY!!!
+    public Booking(Guid id, DateTime start, DateTime slut)
+    {
+        Id = id;
+        Start = start;
+        Slut = slut;
+    }
 
-    public Guid Id { get; }
-    public DateTime Start { get; private set; }
-    public DateTime Slut { get; private set; }
 
     protected virtual bool IsOverlapping()
     {
