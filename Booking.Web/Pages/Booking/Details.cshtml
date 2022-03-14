@@ -2,3 +2,19 @@
 @model DetailsModel
 @{
 }
+<section class="container-fluid">
+    <h1>Bookings</h1>
+    <article>
+            <div>
+                <label asp-for="Booking.Start"></label>
+                <input asp-for="Booking.Start" class="form-control" readonly="readonly"/>
+            </div>
+            <div>
+                <label asp-for="Booking.Slut"></label>
+                <input asp-for="Booking.Slut" class="form-control" readonly="readonly"/>
+            </div>
+            <div>
+                <a asp-page="./Index">Tilbage til liste</a>
+            </div>
+    </article>
+</section>

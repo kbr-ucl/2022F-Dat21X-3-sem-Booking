@@ -57,9 +57,7 @@ public class EditModel : PageModel
         }
 
         public Guid Id { get; set; }
-
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
-
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
 
         public BookingCommandDto GetAsBookingCommandDto()
