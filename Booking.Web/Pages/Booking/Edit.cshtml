@@ -8,6 +8,7 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Booking.Id" />
+            <input type="hidden" asp-for="Booking.Version" />
             <div class="form-group">
                 <label asp-for="Booking.Start" class="control-label"></label>
                 <input asp-for="Booking.Start" class="form-control" />

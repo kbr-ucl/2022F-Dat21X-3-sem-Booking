@@ -52,15 +52,17 @@ public class EditModel : PageModel
             Id = booking.Id;
             Start = booking.Start;
             Slut = booking.Slut;
+            Version = booking.Version;
         }
 
         public Guid Id { get; set; }
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
+        public byte[] Version { get; set; }
 
         public BookingDto GetAsBookingDto()
         {
-            return new BookingDto {Id = Id, Start = Start, Slut = Slut};
+            return new BookingDto {Id = Id, Start = Start, Slut = Slut, Version = Version};
         }
 
         public static BookingEditModel CreateFromBookingDto(BookingDto booking)

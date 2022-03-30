@@ -10,6 +10,7 @@ public class Booking
     public Guid Id { get; }
     public DateTime Start { get; private set; }
     public DateTime Slut { get; private set; }
+    public byte[] Version { get; }
 
     public Booking(IServiceProvider serviceProvider, DateTime start, DateTime slut)
     {

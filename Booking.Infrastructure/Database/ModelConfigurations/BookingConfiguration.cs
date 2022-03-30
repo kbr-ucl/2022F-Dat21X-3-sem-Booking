@@ -20,5 +20,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<Domain.Entities.Boo
             .IsRequired();
 
         entity.Ignore(b => b.ServiceProvider);
+
+        entity.Property(a => a.Version).IsRowVersion();
     }
 }

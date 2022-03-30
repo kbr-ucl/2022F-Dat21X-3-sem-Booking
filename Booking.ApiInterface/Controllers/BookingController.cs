@@ -30,7 +30,7 @@ public class BookingController : ControllerBase, IBookingService
     {
         var result = new List<BookingDto>();
         _bookingQuery.GetBookings().ToList()
-            .ForEach(a => result.Add(new BookingDto {Id = a.Id, Slut = a.Slut, Start = a.Start}));
+            .ForEach(a => result.Add(new BookingDto {Id = a.Id, Slut = a.Slut, Start = a.Start, Version = a.Version}));
         return result;
     }
 
@@ -40,27 +40,27 @@ public class BookingController : ControllerBase, IBookingService
     {
         var booking = _bookingQuery.GetBooking(id);
         if (booking is null) return null;
-        return new BookingDto {Id = booking.Id, Slut = booking.Slut, Start = booking.Start};
+        return new BookingDto {Id = booking.Id, Slut = booking.Slut, Start = booking.Start, Version = booking.Version };
     }
 
     // POST api/<BookingController>
     [HttpPost]
     public void Create([FromBody] BookingDto value)
     {
-        _bookingCommand.Create(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start});
+        _bookingCommand.Create(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start, Version = value.Version});
     }
 
     // PUT api/<BookingController>/5
     [HttpPut]
     public void Edit([FromBody] BookingDto value)
     {
-        _bookingCommand.Edit(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start});
+        _bookingCommand.Edit(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start, Version = value.Version });
     }
 
     // DELETE api/<BookingController>/5
     [HttpDelete]
     public void Delete(BookingDto value)
     {
-        _bookingCommand.Delete(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start});
+        _bookingCommand.Delete(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start, Version = value.Version });
     }
 }
