@@ -6,5 +6,5 @@ public interface IBookingCommand
 {
     void Create(BookingCommandDto bookingDto);
     void Edit(BookingCommandDto bookingDto);
-    void Delete(Guid id);
+    void Delete(BookingCommandDto bookingDto);
 }

@@ -1,74 +1,71 @@
 using System.ComponentModel;
-using Booking.Application.Contract;
-using Booking.Application.Contract.Dtos;
+using Booking.Contract;
+using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Booking.Web.Pages.Booking
+namespace Booking.Web.Pages.Booking;
+
+public class DeleteModel : PageModel
 {
-    public class DeleteModel : PageModel
+    private readonly IBookingService _bookingService;
+
+    public DeleteModel(IBookingService bookingService)
     {
-        private readonly IBookingQuery _bookingQuery;
-        private readonly IBookingCommand _bookingCommand;
+        _bookingService = bookingService;
+    }
 
-        public DeleteModel(IBookingQuery bookingQuery, IBookingCommand bookingCommand)
+    [FromRoute] public Guid Id { get; set; }
+    [BindProperty] public BookingDeleteModel Booking { get; set; } = new();
+
+
+    public IActionResult OnGet(Guid? id)
+    {
+        if (id == null) return NotFound();
+
+        var domainBooking = _bookingService.Get(id.Value);
+        if (domainBooking == null) return NotFound();
+
+        Booking = BookingDeleteModel.CreateFromBookingDto(domainBooking);
+
+        return Page();
+    }
+
+    //https://stackoverflow.com/questions/55602172/asp-net-core-razor-pages-support-for-delete-and-put-requests
+    public IActionResult OnPostAsync(Guid? id)
+    {
+        if (id == null) return NotFound();
+
+        _bookingService.Delete(new BookingDto {Id = id.Value});
+
+        return RedirectToPage("./Index");
+    }
+
+    public class BookingDeleteModel
+    {
+        public BookingDeleteModel()
         {
-            _bookingQuery = bookingQuery;
-            _bookingCommand = bookingCommand;
         }
 
-        [FromRoute] public Guid Id { get; set; }
-        [BindProperty] public BookingDeleteModel Booking { get; set; } = new();
-
-
-        public IActionResult OnGet(Guid? id)
+        private BookingDeleteModel(BookingDto booking)
         {
-            if (id == null) return NotFound();
-
-            var domainBooking = _bookingQuery.GetBooking(id.Value);
-            if (domainBooking == null) return NotFound();
-
-            Booking = BookingDeleteModel.CreateFromBookingQueryDto(domainBooking);
-
-            return Page();
+            Id = booking.Id;
+            Start = booking.Start;
+            Slut = booking.Slut;
         }
 
-        //https://stackoverflow.com/questions/55602172/asp-net-core-razor-pages-support-for-delete-and-put-requests
-        public IActionResult OnPostAsync(Guid? id)
+        public Guid Id { get; set; }
+        [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
+        [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
+
+        public BookingDto GetAsBookingDto()
         {
-            if (id == null) return NotFound();
-
-            _bookingCommand.Delete(id.Value);
-
-            return RedirectToPage("./Index");
+            return new BookingDto {Id = Id, Start = Start, Slut = Slut};
         }
 
-        public class BookingDeleteModel
+        public static BookingDeleteModel CreateFromBookingDto(BookingDto booking)
         {
-            public BookingDeleteModel()
-            {
-            }
-
-            private BookingDeleteModel(BookingQueryDto booking)
-            {
-                Id = booking.Id;
-                Start = booking.Start;
-                Slut = booking.Slut;
-            }
-
-            public Guid Id { get; set; }
-            [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
-            [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
-
-            public BookingCommandDto GetAsBookingCommandDto()
-            {
-                return new BookingCommandDto {Id = Id, Start = Start, Slut = Slut};
-            }
-
-            public static BookingDeleteModel CreateFromBookingQueryDto(BookingQueryDto booking)
-            {
-                return new BookingDeleteModel(booking);
-            }
+            return new BookingDeleteModel(booking);
         }
     }
 }

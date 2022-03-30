@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using Booking.Application.Contract;
-using Booking.Application.Contract.Dtos;
+using Booking.Contract;
+using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,11 +8,11 @@ namespace Booking.Web.Pages.Booking;
 
 public class CreateModel : PageModel
 {
-    private readonly IBookingCommand _bookingCommand;
+    private readonly IBookingService _bookingService;
 
-    public CreateModel(IBookingCommand bookingCommand)
+    public CreateModel(IBookingService bookingService)
     {
-        _bookingCommand = bookingCommand;
+        _bookingService = bookingService;
     }
 
     [BindProperty] public BookingCreateModel Booking { get; set; } = new();
@@ -26,7 +26,7 @@ public class CreateModel : PageModel
     {
         if (!ModelState.IsValid) return Page();
 
-        _bookingCommand.Create(Booking.GetAsBookingCommandDto());
+        _bookingService.Create(Booking.GetAsBookingDto());
         return RedirectToPage("./Index");
     }
 
@@ -38,9 +38,9 @@ public class CreateModel : PageModel
 
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; } = DateTime.Now + TimeSpan.FromMinutes(30);
 
-        public BookingCommandDto GetAsBookingCommandDto()
+        public BookingDto GetAsBookingDto()
         {
-            return new BookingCommandDto {Start = Start, Slut = Slut};
+            return new BookingDto {Start = Start, Slut = Slut};
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using Booking.Application.Contract;
-using Booking.Application.Contract.Dtos;
+using Booking.Contract;
+using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,13 +8,11 @@ namespace Booking.Web.Pages.Booking;
 
 public class EditModel : PageModel
 {
-    private readonly IBookingCommand _bookingCommand;
-    private readonly IBookingQuery _bookingQuery;
+    private readonly IBookingService _bookingService;
 
-    public EditModel(IBookingQuery bookingQuery, IBookingCommand bookingCommand)
+    public EditModel(IBookingService bookingService)
     {
-        _bookingQuery = bookingQuery;
-        _bookingCommand = bookingCommand;
+        _bookingService = bookingService;
     }
 
     [FromRoute] public Guid Id { get; set; }
@@ -26,10 +24,10 @@ public class EditModel : PageModel
     {
         if (id == null) return NotFound();
 
-        var domainBooking = _bookingQuery.GetBooking(id.Value);
+        var domainBooking = _bookingService.Get(id.Value);
         if (domainBooking == null) return NotFound();
 
-        Booking = BookingEditModel.CreateFromBookingQueryDto(domainBooking);
+        Booking = BookingEditModel.CreateFromBookingDto(domainBooking);
 
         return Page();
     }
@@ -38,7 +36,7 @@ public class EditModel : PageModel
     {
         if (!ModelState.IsValid) return Page();
 
-        _bookingCommand.Edit(Booking.GetAsBookingCommandDto());
+        _bookingService.Edit(Booking.GetAsBookingDto());
 
         return RedirectToPage("./Index");
     }
@@ -49,7 +47,7 @@ public class EditModel : PageModel
         {
         }
 
-        private BookingEditModel(BookingQueryDto booking)
+        private BookingEditModel(BookingDto booking)
         {
             Id = booking.Id;
             Start = booking.Start;
@@ -60,12 +58,12 @@ public class EditModel : PageModel
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
 
-        public BookingCommandDto GetAsBookingCommandDto()
+        public BookingDto GetAsBookingDto()
         {
-            return new BookingCommandDto {Id = Id, Start = Start, Slut = Slut};
+            return new BookingDto {Id = Id, Start = Start, Slut = Slut};
         }
 
-        public static BookingEditModel CreateFromBookingQueryDto(BookingQueryDto booking)
+        public static BookingEditModel CreateFromBookingDto(BookingDto booking)
         {
             return new BookingEditModel(booking);
         }

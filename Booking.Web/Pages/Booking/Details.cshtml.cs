@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using Booking.Application.Contract;
-using Booking.Application.Contract.Dtos;
+using Booking.Contract;
+using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,11 +8,11 @@ namespace Booking.Web.Pages.Booking;
 
 public class DetailsModel : PageModel
 {
-    private readonly IBookingQuery _bookingQuery;
+    private readonly IBookingService _bookingService;
 
-    public DetailsModel(IBookingQuery bookingQuery)
+    public DetailsModel(IBookingService bookingService)
     {
-        _bookingQuery = bookingQuery;
+        _bookingService = bookingService;
     }
 
     [FromRoute] public Guid Id { get; set; }
@@ -23,10 +23,10 @@ public class DetailsModel : PageModel
     {
         if (id == null) return NotFound();
 
-        var domainBooking = _bookingQuery.GetBooking(id.Value);
+        var domainBooking = _bookingService.Get(id.Value);
         if (domainBooking == null) return NotFound();
 
-        Booking = BookingDetailsModel.CreateFromBookingQueryDto(domainBooking);
+        Booking = BookingDetailsModel.CreateFromBookingDto(domainBooking);
 
         return Page();
     }
@@ -37,7 +37,7 @@ public class DetailsModel : PageModel
         {
         }
 
-        private BookingDetailsModel(BookingQueryDto booking)
+        private BookingDetailsModel(BookingDto booking)
         {
             Id = booking.Id;
             Start = booking.Start;
@@ -48,12 +48,12 @@ public class DetailsModel : PageModel
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
 
-        public BookingCommandDto GetAsBookingCommandDto()
+        public BookingDto GetAsBookingCommandDto()
         {
-            return new BookingCommandDto {Id = Id, Start = Start, Slut = Slut};
+            return new BookingDto {Id = Id, Start = Start, Slut = Slut};
         }
 
-        public static BookingDetailsModel CreateFromBookingQueryDto(BookingQueryDto booking)
+        public static BookingDetailsModel CreateFromBookingDto(BookingDto booking)
         {
             return new BookingDetailsModel(booking);
         }

@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Booking.Application\Booking.Application.csproj" />
+		<ProjectReference Include="..\Booking.Contract\Booking.Contract.csproj" />
 		<ProjectReference Include="..\Booking.Infrastructure\Booking.Infrastructure.csproj" />
 	</ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿namespace Booking.Application.Infrastructure;
+﻿using Booking.Application.Contract.Dtos;
+
+namespace Booking.Application.Infrastructure;
 
 public interface IBookingRepository
 {
