@@ -26,7 +26,7 @@ public class BookingController : ControllerBase, IBookingService
     ///     Her kan man skrive om GET
     /// </summary>
     [HttpGet]
-    public IEnumerable<BookingDto> Get()
+    public async Task<IEnumerable<BookingDto>> GetAsync()
     {
         var result = new List<BookingDto>();
         _bookingQuery.GetBookings().ToList()
@@ -36,7 +36,7 @@ public class BookingController : ControllerBase, IBookingService
 
     // GET api/<BookingController>/5
     [HttpGet("{id}")]
-    public BookingDto? Get(Guid id)
+    public async Task<BookingDto?> GetAsync(Guid id)
     {
         var booking = _bookingQuery.GetBooking(id);
         if (booking is null) return null;
@@ -45,22 +45,22 @@ public class BookingController : ControllerBase, IBookingService
 
     // POST api/<BookingController>
     [HttpPost]
-    public void Create([FromBody] BookingDto value)
+    public async Task CreateAsync([FromBody] BookingDto value)
     {
         _bookingCommand.Create(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start});
     }
 
     // PUT api/<BookingController>/5
     [HttpPut]
-    public void Edit([FromBody] BookingDto value)
+    public async Task EditAsync([FromBody] BookingDto value)
     {
         _bookingCommand.Edit(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start});
     }
 
     // DELETE api/<BookingController>/5
     [HttpDelete]
-    public void Delete(BookingDto value)
+    public async Task DeleteAsync(Guid id)
     {
-        _bookingCommand.Delete(new BookingCommandDto {Id = value.Id, Slut = value.Slut, Start = value.Start});
+        _bookingCommand.Delete(new BookingCommandDto {Id = id});
     }
 }
