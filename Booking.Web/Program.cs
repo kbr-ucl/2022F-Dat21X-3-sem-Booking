@@ -1,6 +1,16 @@
+using Booking.Contract;
+using Booking.Web.Infrastructure;
+using Microsoft.Net.Http.Headers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient<IBookingService, BookingServiceProxy>
+    (client =>
+    {
+        client.BaseAddress =
+            new Uri("https://localhost:7004");
+    });
 
 var app = builder.Build();
 
