@@ -4,6 +4,6 @@ namespace Booking.Application.Contract;
 
 public interface IBookingQuery
 {
-    BookingQueryDto? GetBooking(Guid id);
-    IEnumerable<BookingQueryDto> GetBookings();
+    Task<BookingQueryDto?> GetBookingAsync(Guid id);
+    Task<IEnumerable<BookingQueryDto>> GetBookingsAsync();
 }

@@ -4,9 +4,9 @@ namespace Booking.Contract;
 
 public interface IBookingService
 {
-    void Create(BookingDto bookingDto);
-    void Edit(BookingDto bookingDto);
-    void Delete(BookingDto bookingDto);
-    BookingDto? Get(Guid id);
-    IEnumerable<BookingDto> Get();
+    Task CreateAsync(BookingDto bookingDto);
+    Task EditAsync(BookingDto bookingDto);
+    Task DeleteAsync(Guid id);
+    Task<BookingDto?> GetAsync(Guid id);
+    Task<IEnumerable<BookingDto>> GetAsync();
 }

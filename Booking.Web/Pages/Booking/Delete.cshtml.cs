@@ -19,11 +19,11 @@ public class DeleteModel : PageModel
     [BindProperty] public BookingDeleteModel Booking { get; set; } = new();
 
 
-    public IActionResult OnGet(Guid? id)
+    public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id == null) return NotFound();
 
-        var domainBooking = _bookingService.Get(id.Value);
+        var domainBooking = await _bookingService.GetAsync(id.Value);
         if (domainBooking == null) return NotFound();
 
         Booking = BookingDeleteModel.CreateFromBookingDto(domainBooking);
@@ -32,11 +32,11 @@ public class DeleteModel : PageModel
     }
 
     //https://stackoverflow.com/questions/55602172/asp-net-core-razor-pages-support-for-delete-and-put-requests
-    public IActionResult OnPostAsync(Guid? id)
+    public async Task<IActionResult> OnPostAsync(Guid? id)
     {
         if (id == null) return NotFound();
 
-        _bookingService.Delete(new BookingDto {Id = id.Value});
+        await _bookingService.DeleteAsync(id.Value);
 
         return RedirectToPage("./Index");
     }

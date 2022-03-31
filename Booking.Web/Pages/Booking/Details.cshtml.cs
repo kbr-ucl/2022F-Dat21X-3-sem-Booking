@@ -19,11 +19,11 @@ public class DetailsModel : PageModel
     [BindProperty] public BookingDetailsModel Booking { get; set; } = new();
 
 
-    public IActionResult OnGet(Guid? id)
+    public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id == null) return NotFound();
 
-        var domainBooking = _bookingService.Get(id.Value);
+        var domainBooking = await _bookingService.GetAsync(id.Value);
         if (domainBooking == null) return NotFound();
 
         Booking = BookingDetailsModel.CreateFromBookingDto(domainBooking);

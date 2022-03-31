@@ -17,10 +17,11 @@ public class IndexModel : PageModel
 
     [BindProperty] public IEnumerable<BookingIndexModel> Bookings { get; set; } = Enumerable.Empty<BookingIndexModel>();
 
-    public void OnGet()
+    public async Task OnGetAsync()
     {
         var bookings = new List<BookingIndexModel>();
-        _bookingService.Get().ToList().ForEach(a => bookings.Add(new BookingIndexModel(a)));
+        var dbBookings = await _bookingService.GetAsync();
+        dbBookings.ToList().ForEach(a => bookings.Add(new BookingIndexModel(a)));
         Bookings = bookings;
     }
 

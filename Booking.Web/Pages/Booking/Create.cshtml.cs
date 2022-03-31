@@ -22,11 +22,11 @@ public class CreateModel : PageModel
         Booking = new BookingCreateModel();
     }
 
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid) return Page();
 
-        _bookingService.Create(Booking.GetAsBookingDto());
+        await _bookingService.CreateAsync(Booking.GetAsBookingDto());
         return RedirectToPage("./Index");
     }
 

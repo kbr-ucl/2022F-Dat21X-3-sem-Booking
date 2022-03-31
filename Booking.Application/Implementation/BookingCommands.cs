@@ -15,22 +15,22 @@ public class BookingCommand : IBookingCommand
         _repository = repository;
     }
 
-    void IBookingCommand.Create(BookingCommandDto bookingDto)
+    async Task IBookingCommand.CreateAsync(BookingCommandDto bookingDto)
     {
         var booking = new Booking.Domain.Entities.Booking(_serviceProvider, bookingDto.Start, bookingDto.Slut);
-        _repository.Add(booking);
+        await _repository.AddAsync(booking);
     }
 
-    void IBookingCommand.Delete(BookingCommandDto bookingDto)
+    async Task IBookingCommand.DeleteAsync(BookingCommandDto bookingDto)
     {
-        _repository.Delete(bookingDto.Id);
+        await _repository.DeleteAsync(bookingDto.Id);
     }
 
-    void IBookingCommand.Edit(BookingCommandDto bookingDto)
+    async Task IBookingCommand.EditAsync(BookingCommandDto bookingDto)
     {
-        var booking = _repository.Get(bookingDto.Id);
+        var booking = await _repository.GetAsync(bookingDto.Id);
         booking.ServiceProvider = _serviceProvider;
         booking.Update(bookingDto.Start, bookingDto.Slut);
-        _repository.Save(booking);
+        await _repository.SaveAsync(booking);
     }
 }
