@@ -4,7 +4,7 @@ namespace Booking.Application.Contract;
 
 public interface IBookingCommand
 {
-    void Create(BookingCommandDto bookingDto);
-    void Edit(BookingCommandDto bookingDto);
-    void Delete(BookingCommandDto bookingDto);
+    Task CreateAsync(BookingCommandDto bookingDto);
+    Task EditAsync(BookingCommandDto bookingDto);
+    Task DeleteAsync(BookingCommandDto bookingDto);
 }

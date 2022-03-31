@@ -17,11 +17,11 @@ namespace Booking.Web.Infrastructure
 
         async Task IBookingService.CreateAsync(BookingDto bookingDto)
         {
-            var bookingDtoson = new StringContent(
+            var bookingDtoJson = new StringContent(
                 JsonSerializer.Serialize(bookingDto),
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
-            await _client.PostAsync("/api/Booking", bookingDtoson);
+            await _client.PostAsync("/api/Booking", bookingDtoJson);
         }
 
         async Task IBookingService.DeleteAsync(Guid id)

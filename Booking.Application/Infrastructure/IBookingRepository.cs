@@ -4,8 +4,8 @@ namespace Booking.Application.Infrastructure;
 
 public interface IBookingRepository
 {
-    void Add(Domain.Entities.Booking booking);
-    Domain.Entities.Booking Get(Guid id);
-    void Save(Domain.Entities.Booking booking);
-    void Delete(Guid id);
+    Task AddAsync(Domain.Entities.Booking booking);
+    Task<Domain.Entities.Booking> GetAsync(Guid id);
+    Task SaveAsync(Domain.Entities.Booking booking);
+    Task DeleteAsync(Guid id);
 }

@@ -12,29 +12,29 @@ public class BookingRepository : IBookingRepository
         _db = db;
     }
 
-    void IBookingRepository.Add(Domain.Entities.Booking booking)
+    async Task IBookingRepository.AddAsync(Domain.Entities.Booking booking)
     {
         _db.Bookings.Add(booking);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
     }
 
-    void IBookingRepository.Delete(Guid id)
+    async Task IBookingRepository.DeleteAsync(Guid id)
     {
         var booking = _db.Bookings.Find(id);
         if (booking is null) return;
 
         _db.Bookings.Remove(booking);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
     }
 
-    Domain.Entities.Booking IBookingRepository.Get(Guid id)
+    async Task<Domain.Entities.Booking> IBookingRepository.GetAsync(Guid id)
     {
-        return _db.Bookings.Find(id) ?? throw new Exception("Booking not found");
+        return await _db.Bookings.FindAsync(id) ?? throw new Exception("Booking not found");
     }
 
-    void IBookingRepository.Save(Domain.Entities.Booking booking)
+    async Task IBookingRepository.SaveAsync(Domain.Entities.Booking booking)
     {
         _db.Bookings.Update(booking);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
     }
 }

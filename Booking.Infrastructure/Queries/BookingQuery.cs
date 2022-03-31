@@ -1,6 +1,7 @@
 ﻿using Booking.Application.Contract;
 using Booking.Application.Contract.Dtos;
 using Booking.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Infrastructure.Queries;
 
@@ -13,9 +14,9 @@ public class BookingQuery : IBookingQuery
         _db = db;
     }
 
-    BookingQueryDto IBookingQuery.GetBooking(Guid id)
+    async Task<BookingQueryDto?> IBookingQuery.GetBookingAsync(Guid id)
     {
-        var result = _db.Bookings.Find(id);
+        var result = await _db.Bookings.FindAsync(id);
         if (result is null) return new BookingQueryDto();
 
         return new BookingQueryDto
@@ -26,10 +27,11 @@ public class BookingQuery : IBookingQuery
         };
     }
 
-    IEnumerable<BookingQueryDto> IBookingQuery.GetBookings()
+    async Task<IEnumerable<BookingQueryDto>> IBookingQuery.GetBookingsAsync()
     {
         var result = new List<BookingQueryDto>();
-        _db.Bookings.ToList().ForEach(a => result.Add(new BookingQueryDto
+        var dbBookings = await _db.Bookings.ToListAsync();
+        dbBookings.ForEach(a => result.Add(new BookingQueryDto
         {
             Id = a.Id,
             Start = a.Start,
