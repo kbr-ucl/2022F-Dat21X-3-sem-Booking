@@ -30,7 +30,7 @@ public class BookingCommand : IBookingCommand
     {
         var booking = await _repository.GetAsync(bookingDto.Id);
         booking.ServiceProvider = _serviceProvider;
-        booking.Update(bookingDto.Start, bookingDto.Slut);
+        booking.Update(bookingDto.Start, bookingDto.Slut, bookingDto.Version);
         await _repository.SaveAsync(booking);
     }
 }
