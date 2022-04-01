@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using AutoMapper;
 using Booking.Contract;
 using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace Booking.Web.Pages.Booking;
 public class DeleteModel : PageModel
 {
     private readonly IBookingService _bookingService;
+    private readonly IMapper _mapper;
 
-    public DeleteModel(IBookingService bookingService)
+    public DeleteModel(IBookingService bookingService, IMapper mapper)
     {
         _bookingService = bookingService;
+        _mapper = mapper;
     }
 
     [FromRoute] public Guid Id { get; set; }
@@ -26,7 +29,7 @@ public class DeleteModel : PageModel
         var domainBooking = await _bookingService.GetAsync(id.Value);
         if (domainBooking == null) return NotFound();
 
-        Booking = BookingDeleteModel.CreateFromBookingDto(domainBooking);
+        Booking = _mapper.Map<BookingDeleteModel>(domainBooking);
 
         return Page();
     }
@@ -43,17 +46,6 @@ public class DeleteModel : PageModel
 
     public class BookingDeleteModel
     {
-        public BookingDeleteModel()
-        {
-        }
-
-        private BookingDeleteModel(BookingDto booking)
-        {
-            Id = booking.Id;
-            Start = booking.Start;
-            Slut = booking.Slut;
-        }
-
         public Guid Id { get; set; }
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
@@ -61,11 +53,6 @@ public class DeleteModel : PageModel
         public BookingDto GetAsBookingDto()
         {
             return new BookingDto {Id = Id, Start = Start, Slut = Slut};
-        }
-
-        public static BookingDeleteModel CreateFromBookingDto(BookingDto booking)
-        {
-            return new BookingDeleteModel(booking);
         }
     }
 }

@@ -12,6 +12,8 @@ builder.Services.AddHttpClient<IBookingService, BookingServiceProxy>
             new Uri("https://localhost:7004");
     });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using AutoMapper;
 using Booking.Contract;
 using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,31 +10,24 @@ namespace Booking.Web.Pages.Booking;
 public class IndexModel : PageModel
 {
     private readonly IBookingService _bookingService;
+    private readonly IMapper _mapper;
 
-    public IndexModel(IBookingService bookingService)
+    public IndexModel(IBookingService bookingService, IMapper mapper)
     {
         _bookingService = bookingService;
+        _mapper = mapper;
     }
 
     [BindProperty] public IEnumerable<BookingIndexModel> Bookings { get; set; } = Enumerable.Empty<BookingIndexModel>();
 
     public async Task OnGetAsync()
     {
-        var bookings = new List<BookingIndexModel>();
         var dbBookings = await _bookingService.GetAsync();
-        dbBookings.ToList().ForEach(a => bookings.Add(new BookingIndexModel(a)));
-        Bookings = bookings;
+        Bookings = _mapper.Map<IEnumerable<BookingDto>, IEnumerable<BookingIndexModel>>(dbBookings);
     }
 
     public class BookingIndexModel
     {
-        public BookingIndexModel(BookingDto booking)
-        {
-            Id = booking.Id;
-            Start = booking.Start;
-            Slut = booking.Slut;
-        }
-
         public Guid Id { get; set; }
 
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }

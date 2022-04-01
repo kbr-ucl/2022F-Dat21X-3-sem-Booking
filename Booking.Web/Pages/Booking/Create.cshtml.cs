@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using AutoMapper;
 using Booking.Contract;
 using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace Booking.Web.Pages.Booking;
 public class CreateModel : PageModel
 {
     private readonly IBookingService _bookingService;
+    private readonly IMapper _mapper;
 
-    public CreateModel(IBookingService bookingService)
+    public CreateModel(IBookingService bookingService, IMapper mapper)
     {
         _bookingService = bookingService;
+        _mapper = mapper;
     }
 
     [BindProperty] public BookingCreateModel Booking { get; set; } = new();
@@ -26,7 +29,7 @@ public class CreateModel : PageModel
     {
         if (!ModelState.IsValid) return Page();
 
-        await _bookingService.CreateAsync(Booking.GetAsBookingDto());
+        await _bookingService.CreateAsync(_mapper.Map<BookingDto>(Booking));
         return RedirectToPage("./Index");
     }
 
@@ -37,10 +40,5 @@ public class CreateModel : PageModel
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; } = DateTime.Now;
 
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; } = DateTime.Now + TimeSpan.FromMinutes(30);
-
-        public BookingDto GetAsBookingDto()
-        {
-            return new BookingDto {Start = Start, Slut = Slut};
-        }
     }
 }

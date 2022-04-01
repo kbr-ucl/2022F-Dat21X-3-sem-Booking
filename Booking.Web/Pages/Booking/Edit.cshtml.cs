@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using AutoMapper;
 using Booking.Contract;
 using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ namespace Booking.Web.Pages.Booking;
 public class EditModel : PageModel
 {
     private readonly IBookingService _bookingService;
+    private readonly IMapper _mapper;
 
-    public EditModel(IBookingService bookingService)
+    public EditModel(IBookingService bookingService, IMapper mapper)
     {
         _bookingService = bookingService;
+        _mapper = mapper;
     }
 
     [FromRoute] public Guid Id { get; set; }
@@ -27,7 +30,7 @@ public class EditModel : PageModel
         var domainBooking = await _bookingService.GetAsync(id.Value);
         if (domainBooking == null) return NotFound();
 
-        Booking = BookingEditModel.CreateFromBookingDto(domainBooking);
+        Booking = _mapper.Map<BookingEditModel>(domainBooking);
 
         return Page();
     }
@@ -36,36 +39,15 @@ public class EditModel : PageModel
     {
         if (!ModelState.IsValid) return Page();
 
-        _bookingService.EditAsync(Booking.GetAsBookingDto());
+        _bookingService.EditAsync(_mapper.Map<BookingDto>(Booking));
 
         return RedirectToPage("./Index");
     }
 
     public class BookingEditModel
     {
-        public BookingEditModel()
-        {
-        }
-
-        private BookingEditModel(BookingDto booking)
-        {
-            Id = booking.Id;
-            Start = booking.Start;
-            Slut = booking.Slut;
-        }
-
         public Guid Id { get; set; }
         [DisplayName("Start tidspunkt")] public DateTime Start { get; set; }
         [DisplayName("Slut tidspunkt")] public DateTime Slut { get; set; }
-
-        public BookingDto GetAsBookingDto()
-        {
-            return new BookingDto {Id = Id, Start = Start, Slut = Slut};
-        }
-
-        public static BookingEditModel CreateFromBookingDto(BookingDto booking)
-        {
-            return new BookingEditModel(booking);
-        }
     }
 }
