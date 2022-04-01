@@ -34,7 +34,6 @@ public class BookingRepository : IBookingRepository
 
     async Task IBookingRepository.SaveAsync(Domain.Entities.Booking booking)
     {
-        _db.Bookings.Update(booking);
         await _db.SaveChangesAsync();
     }
 }

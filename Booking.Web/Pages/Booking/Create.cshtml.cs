@@ -40,7 +40,7 @@ public class CreateModel : PageModel
 
         public BookingDto GetAsBookingDto()
         {
-            return new BookingDto {Start = Start, Slut = Slut};
+            return new BookingDto {Start = Start, Slut = Slut, Version = new byte[7]};
         }
     }
 }

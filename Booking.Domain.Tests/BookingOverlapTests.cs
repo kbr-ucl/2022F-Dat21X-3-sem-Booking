@@ -63,7 +63,7 @@ public class BookingOverlapTests
         sut.ServiceProvider = _serviceProvider;
 
         // Act
-        sut.Update(start, slut);
+        sut.Update(start, slut, new byte[1]);
 
         //Assert
         Assert.NotNull(sut);
@@ -81,7 +81,7 @@ public class BookingOverlapTests
         var expected = "Booking overlapper med eksisterende booking";
 
         // Act
-        Action action = () => sut.Update(start, slut);
+        Action action = () => sut.Update(start, slut, new byte[1]);
 
         //Assert
         var caughtException = Assert.Throws<Exception>(action);

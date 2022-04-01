@@ -23,7 +23,8 @@ public class BookingQuery : IBookingQuery
         {
             Id = result.Id,
             Start = result.Start,
-            Slut = result.Slut
+            Slut = result.Slut,
+            Version = result.Version
         };
     }
 

@@ -38,7 +38,7 @@ public class BookingEditTests
         sut.ServiceProvider = _serviceProvider;
 
         // Act
-        sut.Update(start, slut);
+        sut.Update(start, slut, new byte[1]);
 
         //Assert
         Assert.NotNull(sut);
@@ -53,7 +53,7 @@ public class BookingEditTests
         sut.ServiceProvider = _serviceProvider;
 
         // Act
-        Action action = () => sut.Update(default, sut.Slut);
+        Action action = () => sut.Update(default, sut.Slut, new byte[1]);
 
         //Assert
         var caughtException = Assert.Throws<ArgumentOutOfRangeException>(action);
@@ -69,7 +69,7 @@ public class BookingEditTests
         sut.ServiceProvider = _serviceProvider;
 
         // Act
-        Action action = () => sut.Update(sut.Start, default);
+        Action action = () => sut.Update(sut.Start, default, new byte[1]);
 
         //Assert
         var caughtException = Assert.Throws<ArgumentOutOfRangeException>(action);
@@ -89,7 +89,7 @@ public class BookingEditTests
         sut.ServiceProvider = _serviceProvider;
 
         // Act
-        Action action = () => sut.Update(start, slut);
+        Action action = () => sut.Update(start, slut, new byte[1]);
 
         //Assert
         var caughtException = Assert.Throws<Exception>(action);
