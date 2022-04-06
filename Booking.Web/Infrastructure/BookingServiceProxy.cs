@@ -36,15 +36,11 @@ namespace Booking.Web.Infrastructure
                 JsonSerializer.Serialize(bookingDto),
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
-            try
-            {
-                await _client.PutAsync("/api/Booking", bookingDtoson);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+                var result = await _client.PutAsync("/api/Booking", bookingDtoson);
+
+                if (!result.IsSuccessStatusCode)
+                    throw new Exception(result.ReasonPhrase);
 
         }
 

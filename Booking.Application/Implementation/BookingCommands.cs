@@ -30,8 +30,6 @@ public class BookingCommand : IBookingCommand
     async Task IBookingCommand.EditAsync(BookingCommandDto bookingDto)
     {
         var booking = await _repository.GetAsync(bookingDto.Id);
-        if (BitConverter.ToInt64(booking.Version) != BitConverter.ToInt64(bookingDto.Version))
-            throw new DBConcurrencyException("Booking er opdateret af en anden bruger");
         booking.ServiceProvider = _serviceProvider;
         booking.Update(bookingDto.Start, bookingDto.Slut, bookingDto.Version);
         await _repository.SaveAsync(booking);

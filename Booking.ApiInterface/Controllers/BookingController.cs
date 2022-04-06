@@ -3,6 +3,7 @@ using Booking.Application.Contract;
 using Booking.Application.Contract.Dtos;
 using Booking.Contract.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +32,7 @@ public class BookingController : ControllerBase //, IBookingService
         var result = new List<BookingDto>();
         var bookings = await _bookingQuery.GetBookingsAsync();
         bookings.ToList()
-            .ForEach(a => result.Add(new BookingDto {Id = a.Id, Slut = a.Slut, Start = a.Start}));
+            .ForEach(a => result.Add(new BookingDto {Id = a.Id, Slut = a.Slut, Start = a.Start, Version = a.Version}));
         return result;
     }
 
@@ -41,7 +42,7 @@ public class BookingController : ControllerBase //, IBookingService
     {
         var booking = await _bookingQuery.GetBookingAsync(id);
         if (booking is null) return BadRequest();
-        return new BookingDto {Id = booking.Id, Slut = booking.Slut, Start = booking.Start};
+        return new BookingDto {Id = booking.Id, Slut = booking.Slut, Start = booking.Start, Version = booking.Version };
     }
 
     // POST api/<BookingController>
@@ -57,9 +58,20 @@ public class BookingController : ControllerBase //, IBookingService
     [HttpPut]
     public async Task<ActionResult> EditAsync([FromBody] BookingDto value)
     {
-        await _bookingCommand.EditAsync(new BookingCommandDto
-                {Id = value.Id, Slut = value.Slut, Start = value.Start});
+        try
+        {
+            await _bookingCommand.EditAsync(new BookingCommandDto
+                {Id = value.Id, Slut = value.Slut, Start = value.Start, Version = value.Version});
             return Ok();
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            return Conflict(e.Message);
+        }
+        catch (Exception ee)
+        {
+            return BadRequest(ee.Message);
+        }
     }
 
     // DELETE api/<BookingController>/5

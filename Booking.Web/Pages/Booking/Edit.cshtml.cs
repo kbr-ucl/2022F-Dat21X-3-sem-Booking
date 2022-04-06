@@ -32,11 +32,18 @@ public class EditModel : PageModel
         return Page();
     }
 
-    public IActionResult OnPostAsync()
+    public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid) return Page();
-
-        _bookingService.EditAsync(Booking.GetAsBookingDto());
+        try
+        {
+            await _bookingService.EditAsync(Booking.GetAsBookingDto());
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError(String.Empty, e.Message);
+            return Page();
+        }
 
         return RedirectToPage("./Index");
     }

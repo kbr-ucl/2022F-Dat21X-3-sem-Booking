@@ -1,5 +1,6 @@
 ﻿using Booking.Application.Infrastructure;
 using Booking.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Infrastructure.RepositoriesImpl;
 
@@ -29,11 +30,12 @@ public class BookingRepository : IBookingRepository
 
     async Task<Domain.Entities.Booking> IBookingRepository.GetAsync(Guid id)
     {
-        return await _db.Bookings.FindAsync(id) ?? throw new Exception("Booking not found");
+        return await _db.Bookings.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id) ?? throw new Exception("Booking not found");
     }
 
     async Task IBookingRepository.SaveAsync(Domain.Entities.Booking booking)
     {
+        _db.Bookings.Update(booking);
         await _db.SaveChangesAsync();
     }
 }
