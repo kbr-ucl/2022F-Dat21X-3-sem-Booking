@@ -12,7 +12,7 @@ public class BookingDomainService : IBookingDomainService
     {
         _db = db;
     }
-    IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetExsistingBookings(Domain.Entities.Booking booking)
+    IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetOtherBookings(Domain.Entities.Booking booking)
     {
         return _db.Bookings.Where(b => b.Id != booking.Id).ToList();
     }

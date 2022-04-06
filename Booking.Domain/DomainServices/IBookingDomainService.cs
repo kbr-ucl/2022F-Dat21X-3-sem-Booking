@@ -2,5 +2,5 @@
 
 public interface IBookingDomainService
 {
-    IEnumerable<Entities.Booking> GetExsistingBookings(Domain.Entities.Booking booking);
+    IEnumerable<Entities.Booking> GetOtherBookings(Domain.Entities.Booking booking);
 }

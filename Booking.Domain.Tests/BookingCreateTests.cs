@@ -19,7 +19,7 @@ public class BookingCreateTests
             new Entities.Booking(Guid.NewGuid(), new DateTime(2022, 1, 1, 14, 0, 0), new DateTime(2022, 1, 1, 15, 0, 0))
         });
         var bookingDomainServiceMock = new Mock<IBookingDomainService>();
-        bookingDomainServiceMock.Setup(foo => foo.GetExsistingBookings()).Returns(exsistingBookings);
+        bookingDomainServiceMock.Setup(foo => foo.GetOtherBookings(It.IsAny<Entities.Booking>())).Returns(exsistingBookings);
 
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddScoped(_ => bookingDomainServiceMock.Object);

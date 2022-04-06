@@ -39,7 +39,7 @@ public class Booking
         var bookingDomainService = ServiceProvider?.GetService<IBookingDomainService>();
         if (bookingDomainService == null) throw new Exception("Implementation of IBookingDomainService was not found");
 
-        return bookingDomainService.GetExsistingBookings()
+        return bookingDomainService.GetOtherBookings(this)
             // https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
             .Any(a => a.Id != Id && a.Start <= Slut && Start <= a.Slut);
     }

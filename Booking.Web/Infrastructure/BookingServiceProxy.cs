@@ -36,7 +36,16 @@ namespace Booking.Web.Infrastructure
                 JsonSerializer.Serialize(bookingDto),
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
-            await _client.PutAsync("/api/Booking", bookingDtoson);
+            try
+            {
+                await _client.PutAsync("/api/Booking", bookingDtoson);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
         }
 
         async Task<BookingDto?> IBookingService.GetAsync(Guid id)
