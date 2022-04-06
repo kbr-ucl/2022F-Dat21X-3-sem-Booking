@@ -1,5 +1,6 @@
 ﻿using Booking.Domain.DomainServices;
 using Booking.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Infrastructure.DomainServicesImpl;
 
@@ -11,8 +12,8 @@ public class BookingDomainService : IBookingDomainService
     {
         _db = db;
     }
-    IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetExsistingBookings()
+    IEnumerable<Domain.Entities.Booking> IBookingDomainService.GetOtherBookings(Domain.Entities.Booking booking)
     {
-        return _db.Bookings.ToList();
+        return _db.Bookings.Where(b => b.Id != booking.Id).ToList();
     }
 }
