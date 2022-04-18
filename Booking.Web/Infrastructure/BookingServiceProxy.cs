@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Diagnostics;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using Booking.Contract;
@@ -46,6 +47,7 @@ namespace Booking.Web.Infrastructure
 
         async Task<IEnumerable<BookingDto>> IBookingService.GetAsync()
         {
+            Debug.Write("Tick");
             return await _client.GetFromJsonAsync<IEnumerable<BookingDto>>($"api/Booking");
         }
     }
