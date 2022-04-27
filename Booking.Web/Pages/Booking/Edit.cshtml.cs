@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using Booking.Contract;
 using Booking.Contract.Dtos;
+using Booking.Web.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,10 +11,12 @@ namespace Booking.Web.Pages.Booking;
 public class EditModel : PageModel
 {
     private readonly IBookingService _bookingService;
+    private readonly IAuthorizationService _authService;
 
-    public EditModel(IBookingService bookingService)
+    public EditModel(IBookingService bookingService, IAuthorizationService authService)
     {
         _bookingService = bookingService;
+        _authService = authService;
     }
 
     [FromRoute] public Guid Id { get; set; }
@@ -34,6 +38,12 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        var authResult = await _authService.AuthorizeAsync(User, PolicyEnum.AdminOnly);
+        if (!authResult.Succeeded)
+        {
+            return new ForbidResult();
+        }
+
         if (!ModelState.IsValid) return Page();
         try
         {
